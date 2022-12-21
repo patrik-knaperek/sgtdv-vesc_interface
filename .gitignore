@@ -1,0 +1,18 @@
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode
+src/.vscode
+
+# ROS
+.catkin_tools/
+logs
+devel
+build
+libdarknet.so

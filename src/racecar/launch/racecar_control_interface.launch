@@ -1,0 +1,11 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+
+    <rosparam file="$(find racecar)/config/vesc.yaml" command="load"/>
+    <node pkg="vesc_driver" type="vesc_driver_node" name="vesc_driver"/>
+
+    <arg name="command_topic" default="/pathtracking_commands" />
+    <param name="command_topic" type="str" value="$(arg command_topic)"/>
+    <node pkg="racecar" type="racecar" name="racecar_control_interface"/>
+
+</launch>
