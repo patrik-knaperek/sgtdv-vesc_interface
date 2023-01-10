@@ -16,7 +16,11 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    RaceCar raceCarObj;
+    double steeringOffset = 0;
+    handle.getParam("/racecar/steering_angle_offset", steeringOffset);
+    double steeringRange = 0;
+    handle.getParam("/racecar/steering_range_range", steeringRange);
+    RaceCar raceCarObj(steeringOffset, steeringRange);
 
     raceCarObj.setPublisherMotorSpeed(handle.advertise<std_msgs::Float64>("commands/motor/speed", 1));
     raceCarObj.setPublisherServoPosition(handle.advertise<std_msgs::Float64>("commands/servo/position", 1));
