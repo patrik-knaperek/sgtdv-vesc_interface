@@ -7,9 +7,10 @@
 
 RaceCar::RaceCar() = default;
 
-RaceCar::RaceCar(double angleOffset, double angleRange) {
+RaceCar::RaceCar(float angleOffset, float angleRange, float maxSpeed) {
     m_steeringAngleOffset = angleOffset;
     m_steeringAngleRange = angleRange;
+    m_maxSpeed = maxSpeed;
 };
 
 RaceCar::~RaceCar() = default;
@@ -26,6 +27,8 @@ void RaceCar::setPublisherServoPosition(const ros::Publisher &mPublisherServoPos
 void RaceCar::Do(const racecar::Control control) {
     std_msgs::Float64 motorSpeedMsg;
     motorSpeedMsg.data = control.speed;
+    if (motorSpeedMsg.data > m_maxSpeed)
+        motorSpeedMsg.data = m_maxSpeed;
     m_publisherMotorSpeed.publish(motorSpeedMsg);
 
     std_msgs::Float64 servoPositionMsg;

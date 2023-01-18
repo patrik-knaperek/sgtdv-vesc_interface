@@ -10,7 +10,7 @@
 class RaceCar {
 public:
     RaceCar();
-    RaceCar(double angleOffset, double angleRange);
+    RaceCar(float angleOffset, float angleRange, float maxSpeed);
 
     void setPublisherMotorSpeed(const ros::Publisher &mPublisherMotorSpeed);
 
@@ -23,6 +23,7 @@ public:
 private:
     ros::Publisher m_publisherMotorSpeed;
     ros::Publisher m_publisherServoPosition;
-    double m_steeringAngleOffset;
-    double m_steeringAngleRange;
+    float m_steeringAngleOffset;
+    float m_steeringAngleRange;
+    float m_maxSpeed;
 };
