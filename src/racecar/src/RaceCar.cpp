@@ -7,12 +7,6 @@
 
 RaceCar::RaceCar() = default;
 
-RaceCar::RaceCar(float angleOffset, float angleRange, float maxSpeed) {
-    m_steeringAngleOffset = angleOffset;
-    m_steeringAngleRange = angleRange;
-    m_maxSpeed = maxSpeed;
-};
-
 RaceCar::~RaceCar() = default;
 
 
@@ -24,20 +18,20 @@ void RaceCar::setPublisherServoPosition(const ros::Publisher &mPublisherServoPos
     m_publisherServoPosition = mPublisherServoPosition;
 }
 
-void RaceCar::Do(const racecar::Control control) {
+void RaceCar::Do(const sgtdv_msgs::Control::ConstPtr &controlMsg) {
     std_msgs::Float64 motorSpeedMsg;
-    motorSpeedMsg.data = control.speed;
-    if (motorSpeedMsg.data > m_maxSpeed)
-        motorSpeedMsg.data = m_maxSpeed;
+    motorSpeedMsg.data = controlMsg->speed * K + Q;
+    if (motorSpeedMsg.data > SPEED_OUT_MAX)
+        motorSpeedMsg.data = SPEED_OUT_MAX;
     m_publisherMotorSpeed.publish(motorSpeedMsg);
 
     std_msgs::Float64 servoPositionMsg;
     //convert angle to radian with offset 0.5rad = 28.6479deg
-    servoPositionMsg.data = (control.steeringAngle + m_steeringAngleOffset) * M_PI / 180;
+    servoPositionMsg.data = (controlMsg->steeringAngle / STEERING_ANGLE_IN_RANGE * STEERING_ANGLE_OUT_RANGE + STEERING_ANGLE_OFFSET);
     //restrict angle range
-    if (servoPositionMsg.data > m_steeringAngleRange)
-        servoPositionMsg.data = m_steeringAngleRange;
-    if (servoPositionMsg.data < -m_steeringAngleRange)
-        servoPositionMsg.data = -m_steeringAngleRange;
+    if (servoPositionMsg.data > STEERING_ANGLE_OUT_RANGE + STEERING_ANGLE_OFFSET)
+        servoPositionMsg.data = STEERING_ANGLE_OUT_RANGE + STEERING_ANGLE_OFFSET;
+    if (servoPositionMsg.data < -STEERING_ANGLE_OUT_RANGE + STEERING_ANGLE_OFFSET)
+        servoPositionMsg.data = -STEERING_ANGLE_OUT_RANGE + STEERING_ANGLE_OFFSET;
     m_publisherServoPosition.publish(servoPositionMsg);
 }

@@ -12,13 +12,7 @@ int main(int argc, char **argv) {
     std::string commandTopic;
     handle.getParam("command_topic", commandTopic);
 
-    float steeringOffset = 0;
-    handle.getParam("/racecar/steering_angle_offset", steeringOffset);
-    float steeringRange = 0;
-    handle.getParam("/racecar/steering_range_range", steeringRange);
-    float maxSpeed = 0;
-    handle.getParam("/racecar/speed_max", maxSpeed);
-    RaceCar raceCarObj(steeringOffset, steeringRange, maxSpeed);
+    RaceCar raceCarObj;
 
     raceCarObj.setPublisherMotorSpeed(handle.advertise<std_msgs::Float64>("commands/motor/speed", 1));
     raceCarObj.setPublisherServoPosition(handle.advertise<std_msgs::Float64>("commands/servo/position", 1));

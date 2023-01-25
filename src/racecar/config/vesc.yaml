@@ -1,10 +1,4 @@
 vesc_driver:
   port: /dev/ttyACM0
 
-racecar:
-  #degrees
-  steering_angle_offset: 28.6479
-  steering_range_range: 20
-  speed_max: 10000
-
 command_topic: pathtracking_commands

@@ -10,21 +10,19 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         std_msgs
-        message_generation
+        sgtdv_msgs
         )
 
-add_message_files(
-        FILES
-        Control.msg
-)
+#add_message_files(
+#        FILES
+#)
 
-generate_messages(
-        DEPENDENCIES
-        std_msgs
-)
+#generate_messages(
+#        DEPENDENCIES
+#)
 
 catkin_package(
-        CATKIN_DEPENDS roscpp std_msgs message_runtime
+        CATKIN_DEPENDS roscpp std_msgs sgtdv_msgs
 )
 
 include_directories(
@@ -38,4 +36,4 @@ target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES}
         )
 
-add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
