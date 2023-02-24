@@ -4,7 +4,7 @@ ___
 
 &copy; **SGT Driverless**
 
-**Authors:** Matej Dudák
+**Authors:** Matej Dudák, Patrik Knaperek
 
 **Objective:** Interface for motor control with VESC driver.
 ___
