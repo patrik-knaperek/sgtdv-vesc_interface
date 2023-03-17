@@ -6,7 +6,7 @@
     <rosparam file="$(arg vesc_config)" command="load" />
 
     <!-- VESC driver -->
-    <node pkg="vesc_driver" type="vesc_driver_node" name="vesc_driver" />
+    <node pkg="vesc_driver" type="vesc_driver_node" name="vesc_driver" output="screen"/>
 
     <!-- calculate odometry from VESC sensors -->
     <node pkg="vesc_ackermann" type="vesc_to_odom_node" name="vesc_to_odom" output="screen">

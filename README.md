@@ -2,23 +2,34 @@
 
 ___
 
-&copy; **SGT Driverless**
+© **SGT Driverless**
 
 **Authors:** Matej Dudák, Patrik Knaperek
 
-**Objective:** Interface for motor control with VESC driver.
+**Objective:** Interface for motor control and odometry with VESC (MIT) driver.
 ___
 
-### Used packages
+### Related packages
 
-* [vesc](https://github.com/mit-racecar/vesc)
+* `path_tracking` (SGT-DV)
+* `vesc` (RC car)
 
-### Supported message and data
+### Topic conversions
+* `/pathtracking_commands [sgtdv_msgs::Control]` → `vesc/commands/motor/speed [std_msgs::Float64]`, `vesc/commands/servo/position [std_msgs::Float64]`
+* `/odom [nav_msgs::Odometry]` → `pose_estimate [sgtdv_msgs::CarPose]`, `velocity_estimate [sgtdv_msgs::CarVel]` (optional)
 
-- The node uses [Control.msg](src/racecar/msg/Control.msg).
-- `speed` value range is 0-100
-- `steeringAngle` value range is +-20 degrees
+### Configuration
+
+- sgt command parameters: [`sgt.yaml`](./src/racecar/config/sgt.yaml)
+- vesc commands parameters: [`vesc.yaml`](./src/racecar/config/vesc.yaml)
+- publish odometry: macro `#define VESC_ODOMETRY` in `RaceCar.h`
+
+## Build
+
+* `./build.bash`
 
 ## Launch
+* `./launch.bash`
 
-``./start.bash``
+### Issues
+* [SGT - RC car - Manuals, error solutions](https://docs.google.com/document/d/1M7zWvItjHyNsSe2zlgr-lzvzVdgYPm58dYw4mHXGxWc/edit?usp=sharing)

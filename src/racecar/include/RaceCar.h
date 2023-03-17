@@ -5,6 +5,7 @@
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <std_msgs/Float64.h>
 #include <sgtdv_msgs/Control.h>
 #include <sgtdv_msgs/CarPose.h>
@@ -12,23 +13,38 @@
 
 #define VESC_ODOMETRY
 
-constexpr float STEERING_ANGLE_OFFSET = 0.5f;
-constexpr float STEERING_ANGLE_OUT_RANGE = 0.35f;
-constexpr float STEERING_ANGLE_IN_RANGE = 1.f;
-constexpr float SPEED_OUT_MAX = 10000.f;
-constexpr float SPEED_OUT_MIN = 900.f;
-constexpr float SPEED_IN_MAX = 100.f;
-constexpr float SPEED_IN_MIN = 1.f;
-constexpr float K = (SPEED_OUT_MAX - SPEED_OUT_MIN) / (SPEED_IN_MAX - SPEED_IN_MIN);
-constexpr float Q = SPEED_OUT_MIN - K * SPEED_IN_MIN;
-
 class RaceCar {
 public:
-    RaceCar();
+    RaceCar(ros::NodeHandle &handle);
 
-    void setPublisherMotorSpeed(const ros::Publisher &mPublisherMotorSpeed);
+    void setPublisherMotorSpeedCmd(const ros::Publisher &motorSpeedPub)
+    {
+        m_publisherMotorSpeedCmd = motorSpeedPub;
+    };
+    void setPublisherServoPositionCmd(const ros::Publisher &servoPositionPub)
+    {
+        m_publisherServoPositionCmd = servoPositionPub;
+    };
+    struct Params
+    {
+        float cmdSpeedInMax;
+        float cmdSpeedInMin;
+        float cmdSpeedOutMax;
+        float cmdSpeedOutMin;
+        float cmdSteerInMax;
+        float cmdSteerInMin;
+        float cmdSteerOutMax;
+        float cmdSteerOutMin;
+        float cmdSteerOutOffset;
+        float cmdSteerOutGain;
+        float k;
+        float q;
+    };
 
-    void setPublisherServoPosition(const ros::Publisher &mPublisherServoPosition);
+    void setParams(const Params &params)
+    {
+        m_params = params;
+    };
 
     void Do(const sgtdv_msgs::Control::ConstPtr &controlMsg);
 #ifdef VESC_ODOMETRY
@@ -41,8 +57,17 @@ public:
     virtual ~RaceCar();
 
 private:
-    ros::Publisher m_publisherMotorSpeed;
-    ros::Publisher m_publisherServoPosition;
+    void LoadParams(ros::NodeHandle &handle);
+    void getParam(const ros::NodeHandle &handle, const std::string &name, std::string &storage);
+    float getParam(const ros::NodeHandle &handle, const std::string &name);
+
+    ros::Publisher m_publisherMotorSpeedCmd;
+    ros::Publisher m_publisherServoPositionCmd;
+    
+    Params m_params;
+
+    float m_steeringAngleOffset;
+    float m_steeringAngleGain;
 
 #ifdef VESC_ODOMETRY
     ros::Publisher m_publisherPoseEstimate;

@@ -1,0 +1,4 @@
+cmd_speed_max: 100
+cmd_speed_min: 0
+cmd_steering_max: 1
+cmd_steering_min: -1
