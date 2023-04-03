@@ -20,12 +20,11 @@ int main(int argc, char **argv) {
 #ifdef VESC_ODOMETRY
     raceCarObj.setPublisherPose(handle.advertise<sgtdv_msgs::CarPose>("pose_estimate",1));
     raceCarObj.setPublisherVelocity(handle.advertise<sgtdv_msgs::CarVel>("velocity_estimate",1));
-    ros::Publisher resetOdometryPub = handle.advertise<std_msgs::Empty>("reset_odometry",1);
 
     ros::Subscriber odomSub = handle.subscribe("odom", 1, &RaceCar::odomCallback, &raceCarObj);
+
+    sleep(1);   // wait for VESC to switch to MODE_OPERATING
     raceCarObj.init();
-    resetOdometryPub.publish(std_msgs::Empty());
-    ros::spinOnce();
 #endif
 
     while (ros::ok())

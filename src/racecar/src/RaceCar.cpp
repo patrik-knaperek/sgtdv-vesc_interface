@@ -16,60 +16,67 @@ RaceCar::~RaceCar() = default;
 
 void RaceCar::LoadParams(ros::NodeHandle &handle)
 {
-    m_params.cmdSpeedInMax = getParam(handle, "sgt/cmd_speed_max");
-    m_params.cmdSpeedInMin = getParam(handle, "sgt/cmd_speed_min");
-    m_params.cmdSpeedOutMax = getParam(handle, "vesc/vesc_driver/speed_max");
-    m_params.cmdSpeedOutMin = getParam(handle, "vesc/vesc_driver/speed_min");
-    m_params.cmdSteerInMax = getParam(handle, "sgt/cmd_steering_max");
-    m_params.cmdSteerInMin = getParam(handle, "sgt/cmd_steering_min");
-    m_params.cmdSteerOutMax = getParam(handle, "vesc/vesc_driver/servo_max");
-    m_params.cmdSteerOutMin = getParam(handle, "vesc/vesc_driver/servo_min");
-    m_params.cmdSteerOutOffset = getParam(handle, "vesc/steering_angle_to_servo_offset");
-    m_params.cmdSteerOutGain = getParam(handle, "vesc/steering_angle_to_servo_gain");
-    m_params.k = (m_params.cmdSpeedOutMax - m_params.cmdSpeedOutMin) / (m_params.cmdSpeedInMax - m_params.cmdSpeedInMin);
-    m_params.q = m_params.cmdSpeedOutMin - m_params.k * m_params.cmdSpeedInMin;
+    getParam(handle, "sgt/cmd_speed_max", &m_params.cmdSpeedInMax);
+    getParam(handle, "sgt/cmd_speed_min", &m_params.cmdSpeedInMin);
+    getParam(handle, "vesc/vesc_driver/speed_max", &m_params.cmdSpeedOutMax);
+    getParam(handle, "vesc/vesc_driver/speed_min", &m_params.cmdSpeedOutMin);
+    getParam(handle, "sgt/cmd_steering_max", &m_params.cmdSteerInMax);
+    getParam(handle, "sgt/cmd_steering_min", &m_params.cmdSteerInMin);
+    getParam(handle, "vesc/vesc_driver/servo_max", &m_params.cmdSteerOutMax);
+    getParam(handle, "vesc/vesc_driver/servo_min", &m_params.cmdSteerOutMin);
+    getParam(handle, "vesc/steering_angle_to_servo_offset", &m_params.cmdSteerOutOffset);
+    getParam(handle, "vesc/steering_angle_to_servo_gain", &m_params.cmdSteerOutGain);
+    if (m_params.cmdSpeedInMin == 0)
+    {
+        m_params.k = m_params.cmdSpeedOutMax / m_params.cmdSpeedInMax;
+        m_params.q = 0.0;
+    } else
+    {
+        m_params.k = (m_params.cmdSpeedOutMax - m_params.cmdSpeedOutMin) / (m_params.cmdSpeedInMax - m_params.cmdSpeedInMin);
+        m_params.q = m_params.cmdSpeedOutMin - m_params.k * m_params.cmdSpeedInMin;
+    }
 }
 
-void RaceCar::getParam(const ros::NodeHandle &handle, const std::string &name, std::string &storage)
+template<typename T>
+void RaceCar::getParam(const ros::NodeHandle &handle, const std::string &name, T* storage) const
 {
-    if(!handle.getParam(name, storage))
+    if (!handle.getParam(name, *storage))
         ROS_ERROR("Failed to get parameter \"%s\" from server\n", name.data());
 }
 
-float RaceCar::getParam(const ros::NodeHandle &handle, const std::string &name)
+template<typename T> 
+void RaceCar::getParam(const ros::NodeHandle &handle, const std::string &name,
+                            const T &defaultValue, T* storage) const
 {
-    float storage;
-    if(!handle.getParam(name, storage))
-        ROS_ERROR("Failed to get parameter \"%s\" from server\n", name.data());
-    return storage;
+    if (!handle.param<T>(name, *storage, defaultValue))
+        ROS_WARN_STREAM("Failed to get parameter " << name.data() << " from server, setting default: " << defaultValue);
 }
 
 
 void RaceCar::Do(const sgtdv_msgs::Control::ConstPtr &controlMsg) {
     std_msgs::Float64 motorSpeedMsg, servoPositionMsg;
     
+    // speed command
     motorSpeedMsg.data = controlMsg->speed * m_params.k + m_params.q;
     if (motorSpeedMsg.data > m_params.cmdSpeedOutMax)
         motorSpeedMsg.data = m_params.cmdSpeedOutMax;
     m_publisherMotorSpeedCmd.publish(motorSpeedMsg);
 
-    servoPositionMsg.data = m_steeringAngleGain * controlMsg->steeringAngle + m_steeringAngleOffset;
-    //restrict angle range
+    // steering command
+    servoPositionMsg.data = m_params.cmdSteerOutGain * controlMsg->steeringAngle + m_params.cmdSteerOutOffset;
     if (servoPositionMsg.data > m_params.cmdSteerOutMax)
         servoPositionMsg.data = m_params.cmdSteerOutMax;
-    if (servoPositionMsg.data < m_params.cmdSteerOutMin)
+    else if (servoPositionMsg.data < m_params.cmdSteerOutMin)
         servoPositionMsg.data = m_params.cmdSteerOutMin;
     m_publisherServoPositionCmd.publish(servoPositionMsg);
 }
 
 #ifdef VESC_ODOMETRY
+    // vesc_to_odom_node won't start publishing /odom topic before it receives servo command
     void RaceCar::init()
     {
         std_msgs::Float64 servoPosition;
-        servoPosition.data = 0.1 * (m_params.cmdSteerOutMax - m_params.cmdSteerOutMin) + m_steeringAngleOffset;
-        m_publisherServoPositionCmd.publish(servoPosition);
-        sleep(1);
-        servoPosition.data = -0.1 * (m_params.cmdSteerOutMax - m_params.cmdSteerOutMin) + m_steeringAngleOffset;
+        servoPosition.data = m_params.cmdSteerOutOffset;
         m_publisherServoPositionCmd.publish(servoPosition);
     }
     

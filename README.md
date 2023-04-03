@@ -24,12 +24,13 @@ ___
 - vesc commands parameters: [`vesc.yaml`](./src/racecar/config/vesc.yaml)
 - publish odometry: macro `#define VESC_ODOMETRY` in `RaceCar.h`
 
-## Build
+### Build
 
 * `./build.bash`
 
-## Launch
+### Launch
 * `./launch.bash`
 
-### Issues
+### References
 * [SGT - RC car - Manuals, error solutions](https://docs.google.com/document/d/1M7zWvItjHyNsSe2zlgr-lzvzVdgYPm58dYw4mHXGxWc/edit?usp=sharing)
+* [VESC tunning tutorial](https://mushr.io/tutorials/tuning/)

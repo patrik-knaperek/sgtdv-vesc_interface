@@ -1,9 +1,6 @@
 <!-- -*- mode: XML -*- -->
 <launch>
 
-    <!--<rosparam file="$(find racecar)/config/vesc.yaml" command="load"/>
-    <node pkg="vesc_driver" type="vesc_driver_node" name="vesc_driver"/>-->
-
     <!-- vehicle geometry parameters, footprint, and static transforms -->
     <include file="$(find racecar)/launch/includes/vehicle_geometry.launch.xml"/>
 

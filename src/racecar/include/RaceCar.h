@@ -58,16 +58,13 @@ public:
 
 private:
     void LoadParams(ros::NodeHandle &handle);
-    void getParam(const ros::NodeHandle &handle, const std::string &name, std::string &storage);
-    float getParam(const ros::NodeHandle &handle, const std::string &name);
-
+    template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name, T* storage) const;
+    template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name,
+                                        const T &defaultValue, T* storage) const;
     ros::Publisher m_publisherMotorSpeedCmd;
     ros::Publisher m_publisherServoPositionCmd;
     
     Params m_params;
-
-    float m_steeringAngleOffset;
-    float m_steeringAngleGain;
 
 #ifdef VESC_ODOMETRY
     ros::Publisher m_publisherPoseEstimate;
