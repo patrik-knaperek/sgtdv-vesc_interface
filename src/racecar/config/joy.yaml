@@ -1,0 +1,8 @@
+joy_node:
+  deadman_button: 4
+  axis_speed: 1
+  axis_steering: 3
+  cmd_speed_max: 1.0
+  cmd_speed_min: -1.0
+  cmd_steering_max: 1.0
+  cmd_steering_min: -1.0

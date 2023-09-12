@@ -31,9 +31,10 @@ include_directories(
 )
 
 add_executable(sgt_vesc_interface src/sgt_vesc_interface_node.cpp src/sgt_vesc_interface.cpp)
+add_executable(joy_vesc_interface src/joy_vesc_interface_node.cpp src/joy_vesc_interface.cpp)
 
-target_link_libraries(sgt_vesc_interface
-        ${catkin_LIBRARIES}
-        )
+target_link_libraries(sgt_vesc_interface ${catkin_LIBRARIES})
+target_link_libraries(joy_vesc_interface ${catkin_LIBRARIES})
 
 add_dependencies(sgt_vesc_interface ${catkin_EXPORTED_TARGETS})
+add_dependencies(joy_vesc_interface ${catkin_EXPORTED_TARGETS})

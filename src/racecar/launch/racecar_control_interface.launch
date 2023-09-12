@@ -16,4 +16,6 @@
 
     <node output="screen" pkg="racecar" type="sgt_vesc_interface" name="sgt_vesc_interface"/>
 
+    <include file="$(find racecar)/launch/includes/joy_teleop_interface.launch.xml"/>
+
 </launch>
