@@ -12,6 +12,7 @@ src/.vscode
 
 # ROS
 .catkin_tools/
+.catkin_workspace
 logs
 devel
 build

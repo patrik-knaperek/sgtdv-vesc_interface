@@ -30,10 +30,10 @@ include_directories(
         ${roscpp_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME} src/RaceCarNODE.cpp src/RaceCar.cpp)
+add_executable(sgt_vesc_interface src/sgt_vesc_interface_node.cpp src/sgt_vesc_interface.cpp)
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(sgt_vesc_interface
         ${catkin_LIBRARIES}
         )
 
-add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+add_dependencies(sgt_vesc_interface ${catkin_EXPORTED_TARGETS})

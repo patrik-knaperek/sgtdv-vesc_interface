@@ -7,13 +7,13 @@
     <!-- start electronic speed controller driver -->
     <include file="$(find racecar)/launch/includes/vesc.launch.xml" />
 
-    <node pkg="tf" type="static_transform_publisher" name="odom_to_map" 
-    args="0 0.0 0 0 0 0 map odom 10" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_map" 
+    args="0 0.0 0 0 0 0 map odom" />
 
     <group ns="sgt">
         <rosparam file="$(find racecar)/config/sgt.yaml" command="load" />
     </group>
 
-    <node output="screen" pkg="racecar" type="racecar" name="racecar_control_interface"/>
+    <node output="screen" pkg="racecar" type="sgt_vesc_interface" name="sgt_vesc_interface"/>
 
 </launch>

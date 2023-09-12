@@ -8,7 +8,7 @@ steering_angle_to_servo_offset: 0.5304
 
 # publish odom to base link tf
 vesc_to_odom:
-  publish_tf: true
+  publish_tf: false
 
 vesc_driver:
   port: /dev/ttyACM0
@@ -20,6 +20,7 @@ vesc_driver:
   brake_max: 0.0
   speed_min: -4000
   speed_max: 6000
+  speed_th: 900
   position_min: 0.0
   position_max: 0.0
   servo_min: 0.15
