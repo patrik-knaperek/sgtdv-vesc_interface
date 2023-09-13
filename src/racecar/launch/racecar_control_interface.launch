@@ -8,13 +8,13 @@
     <include file="$(find racecar)/launch/includes/vesc.launch.xml" />
 
     <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_map" 
-    args="0 0.0 0 0 0 0 map odom" />
+    args="0 0 0 0 0 0 map odom" />
 
     <group ns="sgt">
         <rosparam file="$(find racecar)/config/sgt.yaml" command="load" />
     </group>
 
-    <node output="screen" pkg="racecar" type="sgt_vesc_interface" name="sgt_vesc_interface"/>
+    <node output="screen" pkg="racecar" type="vesc_interface" name="vesc_interface"/>
 
     <include file="$(find racecar)/launch/includes/joy_teleop_interface.launch.xml"/>
 

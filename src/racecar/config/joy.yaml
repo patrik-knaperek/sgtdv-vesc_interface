@@ -1,5 +1,6 @@
-joy_node:
+joy:
   deadman_button: 4
+  start_button: 7
   axis_speed: 1
   axis_steering: 3
   cmd_speed_max: 1.0

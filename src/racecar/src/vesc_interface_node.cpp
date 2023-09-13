@@ -1,16 +1,16 @@
 /*****************************************************/
 //Organization: Stuba Green Team
-//Authors: Patrik Knaperek
+//Authors: Matej Dudák, Patrik Knaperek
 /*****************************************************/
 
-#include "../include/joy_vesc_interface.h"
+#include "../include/vesc_interface.h"
 #include <std_msgs/Empty.h>
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "joy_vesc_interface");
+    ros::init(argc, argv, "sgt_vesc_interface");
     ros::NodeHandle handle;
 
-    JoyVescInterface joy_vesc_interface_obj(handle);
+    VescInterface sgt_vesc_interface_obj(handle);
 
     ros::spin();
 

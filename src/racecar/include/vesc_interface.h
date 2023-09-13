@@ -5,38 +5,55 @@
 
 #pragma once
 
+// ROS
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <std_msgs/Float64.h>
+#include <sensor_msgs/Joy.h>
+#include <std_srvs/Empty.h>
+
+// SGT
 #include <sgtdv_msgs/Control.h>
 #include <sgtdv_msgs/CarPose.h>
 #include <sgtdv_msgs/CarVel.h>
 
-#define VESC_ODOMETRY
+// #define VESC_ODOMETRY
 
-class SgtVescInterface {
+class VescInterface {
 public:
-    SgtVescInterface(ros::NodeHandle &handle);
-    ~SgtVescInterface() = default;
+    VescInterface(ros::NodeHandle &handle);
+    ~VescInterface() = default;
 
     struct Params
     {
-        float cmd_speed_in_max;
-        float cmd_speed_in_min;
-        float cmd_speed_out_max;
-        float cmd_speed_out_min;
-        float cmd_steer_in_max;
-        float cmd_steer_in_min;
-        float cmd_steer_out_max;
-        float cmd_steer_out_min;
-        float cmd_steer_out_offset;
-        float cmd_steer_out_gain;
-        float k;
-        float q;
+        float sgt_cmd_speed_max;
+        float sgt_cmd_speed_min;
+        float joy_cmd_speed_max;
+        float joy_cmd_speed_min;
+        float vesc_cmd_speed_max;
+        float vesc_cmd_speed_th;
+        float vesc_cmd_speed_min;
+        float sgt_cmd_steer_max;
+        float sgt_cmd_steer_min;
+        float joy_cmd_steer_max;
+        float joy_cmd_steer_min;
+        float vesc_cmd_steer_max;
+        float vesc_cmd_steer_min;
+        float vesc_cmd_steer_offset;
+        float vesc_cmd_steer_gain;
+        float sgt_vesc_k;
+        float sgt_vesc_q;
+        float joy_vesc_k1, joy_vesc_k2;
+        float joy_vesc_q1, joy_vesc_q2;
+        int speed_axis;
+        int steering_axis;
+        int deadman_button;
+	    int start_button;
     };
 
-    void controlCallback(const sgtdv_msgs::Control::ConstPtr &control_msg);
+    void sgtCmdCallback(const sgtdv_msgs::Control::ConstPtr &control_msg);
+    void joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg);
 #ifdef VESC_ODOMETRY
     void init();
     void setPublisherPose(const ros::Publisher &pose_pub);
@@ -50,7 +67,10 @@ private:
     template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name,
                                         const T &default_value, T* storage) const;
     ros::Publisher motor_speed_cmd_pub_, servo_position_cmd_pub_;
-    ros::Subscriber pathtracking_sub_;
+    ros::Subscriber pathtracking_sub_, joy_sub_;
+    std_srvs::Empty stop_msg_, start_msg_;
+
+    bool deadman_switch_ = false;
     
     Params params_;
 

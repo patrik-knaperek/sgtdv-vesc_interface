@@ -7,6 +7,6 @@
 
   <node pkg="joy" type="joy_node" name="joy_node" />
 
-  <node output="screen" pkg="racecar" type="joy_vesc_interface" name="joy_vesc_interface"/>
+  <!--<node output="screen" pkg="racecar" type="joy_vesc_interface" name="joy_vesc_interface"/>-->
 
 </launch>

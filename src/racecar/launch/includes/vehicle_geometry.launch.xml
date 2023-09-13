@@ -13,7 +13,7 @@
     <node if="$(arg publish_footprint)" name="footprint" pkg="rostopic" type="rostopic" args="pub -l -f '$(arg vehicle_footprint_config)' footprint geometry_msgs/PolygonStamped" />
 
     <!-- static transforms -->
-    <include if="$(arg publish_static_transforms)" file="$(find racecar)/launch/includes/static_transforms.launch.xml" />
+    <!--<include if="$(arg publish_static_transforms)" file="$(find racecar)/launch/includes/static_transforms.launch.xml" />-->
 
   </group>
   
