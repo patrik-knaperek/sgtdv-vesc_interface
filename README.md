@@ -22,14 +22,17 @@ ___
 
 - sgt command parameters: [`sgt.yaml`](./src/racecar/config/sgt.yaml)
 - vesc commands parameters: [`vesc.yaml`](./src/racecar/config/vesc.yaml)
-- publish odometry: macro `#define VESC_ODOMETRY` in `RaceCar.h`
+- publish odometry: macro `#define VESC_ODOMETRY` in [`vesc_interface.h`](./src/racecar/include/vesc_interface.h)
 
 ### Build
-
-* `./build.bash`
+```sh
+$ . ./build.bash
+```
 
 ### Launch
-* `./launch.bash`
+```sh
+$ . ./launch.bash
+```
 
 ### References
 * [SGT - RC car - Manuals, error solutions](https://docs.google.com/document/d/1M7zWvItjHyNsSe2zlgr-lzvzVdgYPm58dYw4mHXGxWc/edit?usp=sharing)
