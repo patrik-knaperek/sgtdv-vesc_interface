@@ -13,19 +13,21 @@ VescInterface::VescInterface(ros::NodeHandle &handle)
 
     motor_speed_cmd_pub_ = handle.advertise<std_msgs::Float64>("vesc/commands/motor/speed", 1);
     servo_position_cmd_pub_ = handle.advertise<std_msgs::Float64>("vesc/commands/servo/position", 1);
+    reset_odom_pub_ = handle.advertise<std_msgs::Empty>("vesc/vesc_to_odom/reset_odometry", 1);
 
     pathtracking_sub_ = handle.subscribe("pathtracking_commands", 1, &VescInterface::sgtCmdCallback, this);
     joy_sub_ = handle.subscribe("joy", 1, &VescInterface::joyCmdCallback, this);
+    reset_odom_sub_ = handle.subscribe("reset_odometry", 1, &VescInterface::resetOdomCallback, this);
 
 #ifdef VESC_ODOMETRY
     pose_estimate_pub_ = handle.advertise<sgtdv_msgs::CarPose>("pose_estimate",1);
     velocity_estimate_pub_ = handle.advertise<sgtdv_msgs::CarVel>("velocity_estimate",1);
 
     odom_sub_ = handle.subscribe("/vesc/odom", 1, &SgtVescInterface::odomCallback, this);
-
-    sleep(1);   // wait for VESC to switch to MODE_OPERATING
-    init();
 #endif
+
+    sleep(2);   // wait for VESC to switch to MODE_OPERATING
+    init();
 }
 
 void VescInterface::loadParams(ros::NodeHandle &handle)
@@ -162,7 +164,11 @@ void VescInterface::joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg
     
 }
 
-#ifdef VESC_ODOMETRY
+void VescInterface::resetOdomCallback(const std_msgs::Empty::ConstPtr &msg)
+{
+    reset_odom_pub_.publish(std_msgs::Empty());
+}
+
     /* vesc_to_odom_node won't start publishing /odom topic before it receives servo command */
     void VescInterface::init()
     {
@@ -171,6 +177,7 @@ void VescInterface::joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg
         servo_position_cmd_pub_.publish(servo_position);
     }
     
+#ifdef VESC_ODOMETRY
     void VescInterface::odomCallback(const nav_msgs::Odometry &odom_msg)
     {
         sgtdv_msgs::CarPose car_pose;

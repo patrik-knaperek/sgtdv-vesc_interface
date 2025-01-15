@@ -10,6 +10,7 @@
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Empty.h>
 #include <sensor_msgs/Joy.h>
 #include <std_srvs/Empty.h>
 
@@ -54,8 +55,10 @@ public:
 
     void sgtCmdCallback(const sgtdv_msgs::Control::ConstPtr &control_msg);
     void joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg);
-#ifdef VESC_ODOMETRY
+    void resetOdomCallback(const std_msgs::Empty::ConstPtr &msg);
     void init();
+
+#ifdef VESC_ODOMETRY
     void setPublisherPose(const ros::Publisher &pose_pub);
     void setPublisherVelocity(const ros::Publisher &vel_pub);
     void odomCallback(const nav_msgs::Odometry &odom_msg);
@@ -66,8 +69,8 @@ private:
     template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name, T* storage) const;
     template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name,
                                         const T &default_value, T* storage) const;
-    ros::Publisher motor_speed_cmd_pub_, servo_position_cmd_pub_;
-    ros::Subscriber pathtracking_sub_, joy_sub_;
+    ros::Publisher motor_speed_cmd_pub_, servo_position_cmd_pub_, reset_odom_pub_;
+    ros::Subscriber pathtracking_sub_, joy_sub_, reset_odom_sub_;
     std_srvs::Empty stop_msg_, start_msg_;
 
     bool deadman_switch_ = false;
