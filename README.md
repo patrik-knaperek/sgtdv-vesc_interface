@@ -11,8 +11,8 @@ ___
 
 ### Related packages
 
-* `path_tracking` (SGT-DV)
-* `vesc` (RC car)
+* [path_tracking](../../path_tracking/README.md) (SGT-DV)
+* [vesc](../vesc/README.md) (RC car)
 
 ### Topic conversions
 * `/pathtracking_commands [sgtdv_msgs::Control]` → `vesc/commands/motor/speed [std_msgs::Float64]`, `vesc/commands/servo/position [std_msgs::Float64]`
@@ -25,13 +25,25 @@ ___
 - publish odometry: macro `#define VESC_ODOMETRY` in [`vesc_interface.h`](./src/racecar/include/vesc_interface.h)
 
 ### Build
+* standalone
 ```sh
-$ . ./build.bash
+$ source ${SGT_ROOT}/ros_implementation/devel/setup.bash
+$ catkin build vesc_interface -DCMAKE_BUILD_TYPE=Release
 ```
+* along with other packages
+```sh
+$ source ${SGT_ROOT}/scripts/build_rc.sh
+``` 
 
 ### Launch
+* standalone
 ```sh
 $ . ./launch.bash
+```
+* along with other packages
+```sh
+$ source ${SGT_ROOT}/ros_implementation/devel/setup.bash
+$ roslaunch master rc.launch
 ```
 
 ### References
