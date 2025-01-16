@@ -1,6 +1,6 @@
 <!-- -*- mode: XML -*- -->
 <launch>
-  <arg name="vesc_config" default="$(find racecar)/config/vesc.yaml" />
+  <arg name="vesc_config" default="$(find vesc_interface)/config/vesc.yaml" />
 
   <group ns="vesc">
     <rosparam file="$(arg vesc_config)" command="load" />

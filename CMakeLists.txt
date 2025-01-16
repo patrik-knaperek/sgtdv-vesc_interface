@@ -1,20 +1,22 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(vesc_interface)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++17)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-        roscpp
-        std_msgs
-        sgtdv_msgs
-        )
+  roscpp
+  std_msgs
+  sgtdv_msgs
+)
+
+find_package(Eigen3 REQUIRED)
+
 
 #add_message_files(
-#        FILES
+#  FILES
 #)
 
 #generate_messages(
@@ -22,12 +24,15 @@ find_package(catkin REQUIRED COMPONENTS
 #)
 
 catkin_package(
-        CATKIN_DEPENDS roscpp std_msgs sgtdv_msgs
+  CATKIN_DEPENDS roscpp std_msgs sgtdv_msgs
 )
 
 include_directories(
-        ${catkin_INCLUDE_DIRS}
-        ${roscpp_INCLUDE_DIRS}
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${roscpp_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/../../
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 add_executable(vesc_interface src/vesc_interface_node.cpp src/vesc_interface.cpp)
