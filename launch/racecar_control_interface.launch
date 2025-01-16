@@ -1,0 +1,21 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+
+    <!-- vehicle geometry parameters, footprint, and static transforms -->
+    <include file="$(find vesc_interface)/launch/includes/vehicle_geometry.launch.xml"/>
+
+    <!-- start electronic speed controller driver -->
+    <include file="$(find vesc_interface)/launch/includes/vesc.launch.xml" />
+
+    <!--<node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_map" 
+    args="0 0 0 0 0 0 map odom" />-->
+
+    <group ns="sgt">
+        <rosparam file="$(find vesc_interface)/config/sgt.yaml" command="load" />
+    </group>
+
+    <node output="screen" pkg="vesc_interface" type="vesc_interface" name="vesc_interface"/>
+
+    <include file="$(find vesc_interface)/launch/includes/joy_teleop_interface.launch.xml"/>
+
+</launch>

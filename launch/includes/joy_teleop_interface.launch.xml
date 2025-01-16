@@ -1,12 +1,12 @@
 <!-- -*- mode: XML -*- -->
 <launch>
   <arg name="joy_teleop_config"
-       default="$(find racecar)/config/joy.yaml" />
+       default="$(find vesc_interface)/config/joy.yaml" />
 
   <rosparam file="$(arg joy_teleop_config)" command="load" />
 
   <node pkg="joy" type="joy_node" name="joy_node" />
 
-  <!--<node output="screen" pkg="racecar" type="joy_vesc_interface" name="joy_vesc_interface"/>-->
+  <!--<node output="screen" pkg="vesc_interface" type="joy_vesc_interface" name="joy_vesc_interface"/>-->
 
 </launch>

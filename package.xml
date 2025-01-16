@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>racecar</name>
+  <name>vesc_interface</name>
   <version>0.0.1</version>
-  <description>The racecar package</description>
+  <description>The vesc_interface package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="patrik.knaperek@sgteam.eu">Patrik Knaperek</maintainer>
