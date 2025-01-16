@@ -12,6 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   sgtdv_msgs
 )
 
+find_package(Eigen3 REQUIRED)
+
+
 #add_message_files(
 #  FILES
 #)
@@ -25,8 +28,11 @@ catkin_package(
 )
 
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
   ${roscpp_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/../../
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 add_executable(vesc_interface src/vesc_interface_node.cpp src/vesc_interface.cpp)

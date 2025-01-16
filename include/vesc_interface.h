@@ -15,13 +15,25 @@
 /* SGT-DV */
 #include <sgtdv_msgs/Control.h>
 
-// #define VESC_ODOMETRY
+#define VESC_ODOMETRY
 
 class VescInterface
 {
 public:
   VescInterface(ros::NodeHandle &handle);
   ~VescInterface() = default;
+
+  void sgtCmdCallback(const sgtdv_msgs::Control::ConstPtr &control_msg);
+  void joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg);
+  void resetOdomCallback(const std_msgs::Empty::ConstPtr &msg);
+  void init();
+
+#ifdef VESC_ODOMETRY
+  void odomCallback(const nav_msgs::Odometry &odom_msg);
+#endif
+
+private:
+  void loadParams(const ros::NodeHandle &handle);
 
   struct Params
   {
@@ -48,30 +60,14 @@ public:
     int steering_axis;
     int deadman_button;
     int start_button;
-  };
+  } params_;
 
-  void sgtCmdCallback(const sgtdv_msgs::Control::ConstPtr &control_msg);
-  void joyCmdCallback(const sensor_msgs::Joy::ConstPtr &control_msg);
-  void resetOdomCallback(const std_msgs::Empty::ConstPtr &msg);
-  void init();
-
-#ifdef VESC_ODOMETRY
-  void odomCallback(const nav_msgs::Odometry &odom_msg);
-#endif
-
-private:
-  void loadParams(ros::NodeHandle &handle);
-  template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name, T* storage) const;
-  template<typename T> void getParam(const ros::NodeHandle &handle, const std::string &name,
-                                      const T &default_value, T* storage) const;
   ros::Publisher motor_speed_cmd_pub_, servo_position_cmd_pub_, reset_odom_pub_;
   ros::Subscriber pathtracking_sub_, joy_sub_, reset_odom_sub_;
   std_srvs::Empty stop_msg_, start_msg_;
 
   bool deadman_switch_ = false;
   
-  Params params_;
-
 #ifdef VESC_ODOMETRY
   ros::Publisher pose_estimate_pub_, velocity_estimate_pub_;
   ros::Subscriber odom_sub_;
