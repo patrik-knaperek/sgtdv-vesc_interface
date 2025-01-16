@@ -3,9 +3,17 @@
 //Authors: Matej Dudák, Patrik Knaperek
 /*****************************************************/
 
-#include "../include/vesc_interface.h"
+/* ROS */
+#include <std_msgs/Float64.h>
 #include "geometry_msgs/Quaternion.h"
 #include <tf/transform_datatypes.h>
+
+/* SGT-DV */
+#include <sgtdv_msgs/CarPose.h>
+#include <sgtdv_msgs/CarVel.h>
+
+/* Header */
+#include "../include/vesc_interface.h"
 
 VescInterface::VescInterface(ros::NodeHandle &handle)
 {

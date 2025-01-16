@@ -5,19 +5,15 @@
 
 #pragma once
 
-// ROS
+/* ROS */
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <std_msgs/Float64.h>
 #include <std_msgs/Empty.h>
 #include <sensor_msgs/Joy.h>
 #include <std_srvs/Empty.h>
 
-// SGT
+/* SGT-DV */
 #include <sgtdv_msgs/Control.h>
-#include <sgtdv_msgs/CarPose.h>
-#include <sgtdv_msgs/CarVel.h>
 
 // #define VESC_ODOMETRY
 
@@ -60,8 +56,6 @@ public:
   void init();
 
 #ifdef VESC_ODOMETRY
-  void setPublisherPose(const ros::Publisher &pose_pub);
-  void setPublisherVelocity(const ros::Publisher &vel_pub);
   void odomCallback(const nav_msgs::Odometry &odom_msg);
 #endif
 

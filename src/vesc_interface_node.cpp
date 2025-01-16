@@ -4,7 +4,6 @@
 /*****************************************************/
 
 #include "../include/vesc_interface.h"
-#include <std_msgs/Empty.h>
 
 int main(int argc, char **argv)
 {
